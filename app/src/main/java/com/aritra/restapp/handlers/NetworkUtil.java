@@ -1,4 +1,4 @@
-package com.aritra.restapp.Handlers;
+package com.aritra.restapp.handlers;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

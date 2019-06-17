@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".Activities.DetailsActivity">
+    tools:context=".activities.DetailsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -83,30 +83,70 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:layout_width="wrap_content"
+                            android:id="@+id/labMOB"
+                            android:layout_height="wrap_content"
+                            android:text="Mobile: "
+                            android:paddingTop="5dp"
+                            android:textStyle="italic"
+                            android:layout_below="@+id/personalDetails"/>
+
+                        <TextView
                             android:id="@+id/personalMobile"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/personalDetails"
+                            android:layout_toEndOf="@+id/labMOB"
                             android:paddingTop="5dp"
-                            android:text="Mobile: 555-454-7898"
+                            android:text="555-454-7898"
                             android:textStyle="italic" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:id="@+id/labLOC1"
+                            android:layout_height="wrap_content"
+                            android:text="Location: "
+                            android:paddingTop="5dp"
+                            android:textStyle="italic"
+                            android:layout_below="@+id/personalMobile"/>
 
                         <TextView
                             android:id="@+id/personalLocation"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/personalMobile"
+                            android:layout_toEndOf="@+id/labLOC1"
                             android:paddingTop="5dp"
-                            android:text="Location: BLR"
+                            android:text="BLR"
                             android:textStyle="italic" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:id="@+id/labSKILLS"
+                            android:layout_height="wrap_content"
+                            android:text="Skills: "
+                            android:paddingTop="5dp"
+                            android:textStyle="italic"
+                            android:layout_below="@+id/personalLocation"/>
+
                         <TextView
                             android:id="@+id/personalSkills"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/personalLocation"
+                            android:layout_toEndOf="@+id/labSKILLS"
                             android:paddingTop="5dp"
-                            android:text="Skills: Android, Java"
+                            android:text="Android, Java"
                             android:textStyle="italic" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:id="@+id/labLINKS"
+                            android:layout_height="wrap_content"
+                            android:text="Links: "
+                            android:paddingTop="5dp"
+                            android:textStyle="italic"
+                            android:layout_below="@+id/personalSkills"/>
 
                         <TextView
                             android:id="@+id/personalLink"
@@ -115,7 +155,8 @@
                             android:layout_below="@id/personalSkills"
                             android:paddingTop="5dp"
                             android:paddingBottom="5dp"
-                            android:text="Link: www.google.com"
+                            android:layout_toEndOf="@+id/labLINKS"
+                            android:text="www.google.com"
                             android:textStyle="italic" />
 
 
@@ -175,48 +216,98 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:layout_width="wrap_content"
+                            android:id="@+id/labORG1"
+                            android:layout_height="wrap_content"
+                            android:text="Organisation: "
+                            android:paddingTop="5dp"
+                            android:textStyle="italic"
+                            android:layout_below="@+id/educationDetails"/>
+
+                        <TextView
                             android:id="@+id/educationOrganisation"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/educationDetails"
+                            android:layout_toEndOf="@+id/labORG1"
                             android:paddingTop="5dp"
-                            android:text="Organisation: NMIT"
+                            android:text="NMIT"
                             android:textStyle="italic" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:id="@+id/labDEG"
+                            android:layout_height="wrap_content"
+                            android:text="Degree: "
+                            android:paddingTop="5dp"
+                            android:textStyle="italic"
+                            android:layout_below="@+id/educationOrganisation"/>
 
                         <TextView
                             android:id="@+id/educationDegree"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/educationOrganisation"
+                            android:layout_toEndOf="@+id/labDEG"
                             android:paddingTop="5dp"
-                            android:text="Degree: BTECH"
+                            android:text="BTECH"
                             android:textStyle="italic" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:id="@+id/labLOC2"
+                            android:layout_height="wrap_content"
+                            android:text="Location: "
+                            android:paddingTop="5dp"
+                            android:textStyle="italic"
+                            android:layout_below="@+id/educationDegree"/>
 
                         <TextView
                             android:id="@+id/educationLocation"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/educationDegree"
+                            android:layout_toEndOf="@+id/labLOC2"
                             android:paddingTop="5dp"
-                            android:text="Location: IXR"
+                            android:text="IXR"
                             android:textStyle="italic" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:id="@+id/labSY"
+                            android:layout_height="wrap_content"
+                            android:text="Start Year: "
+                            android:paddingTop="5dp"
+                            android:textStyle="italic"
+                            android:layout_below="@+id/educationLocation"/>
 
                         <TextView
                             android:id="@+id/educationStartYear"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/educationLocation"
+                            android:layout_toEndOf="@+id/labSY"
                             android:paddingTop="5dp"
-                            android:text="Start Year: 2016"
+                            android:text="2016"
                             android:textStyle="italic" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:id="@+id/labEY"
+                            android:layout_height="wrap_content"
+                            android:text="End Year: "
+                            android:paddingTop="5dp"
+                            android:textStyle="italic"
+                            android:layout_below="@+id/educationStartYear"/>
                         <TextView
                             android:id="@+id/educationEndYear"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/educationStartYear"
+                            android:layout_toEndOf="@+id/labEY"
                             android:paddingTop="5dp"
                             android:paddingBottom="5dp"
-                            android:text="End Year: 2020"
+                            android:text="2020"
                             android:textStyle="italic" />
 
 
@@ -276,41 +367,81 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:layout_width="wrap_content"
+                            android:id="@+id/labORG2"
+                            android:layout_height="wrap_content"
+                            android:text="Organisation: "
+                            android:paddingTop="5dp"
+                            android:textStyle="italic"
+                            android:layout_below="@+id/professionDetails"/>
+
+                        <TextView
                             android:id="@+id/professionOrganisation"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingTop="5dp"
-                            android:text="Organisation: TSF"
+                            android:text="TSF"
                             android:layout_below="@+id/professionDetails"
+                            android:layout_toEndOf="@+id/labORG2"
                             android:textStyle="italic" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:id="@+id/labDSG"
+                            android:layout_height="wrap_content"
+                            android:text="Degree: "
+                            android:paddingTop="5dp"
+                            android:textStyle="italic"
+                            android:layout_below="@+id/professionOrganisation"/>
 
                         <TextView
                             android:id="@+id/professionDesignation"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/professionOrganisation"
+                            android:layout_toEndOf="@+id/labDSG"
                             android:maxLines="2"
                             android:paddingTop="5dp"
-                            android:text="Degree: Intern"
+                            android:text="Intern"
                             android:textStyle="italic" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:id="@+id/labSD"
+                            android:layout_height="wrap_content"
+                            android:text="Start Date: "
+                            android:paddingTop="5dp"
+                            android:textStyle="italic"
+                            android:layout_below="@+id/professionDesignation"/>
 
                         <TextView
                             android:id="@+id/professionStartDate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/professionDesignation"
+                            android:layout_toEndOf="@+id/labSD"
                             android:paddingTop="5dp"
-                            android:text="Start Date: 16 June 2019"
+                            android:text="16 June 2019"
                             android:textStyle="italic" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:id="@+id/labED"
+                            android:layout_height="wrap_content"
+                            android:text="End Date: "
+                            android:paddingTop="5dp"
+                            android:textStyle="italic"
+                            android:layout_below="@+id/professionStartDate"/>
 
                         <TextView
                             android:id="@+id/professionEndDate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/professionStartDate"
+                            android:layout_toEndOf="@+id/labED"
                             android:paddingTop="5dp"
                             android:paddingBottom="5dp"
-                            android:text="End Date: 25 August 2020"
+                            android:text="25 August 2020"
                             android:textStyle="italic" />
 
 
@@ -347,6 +478,7 @@
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabLogout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_anchor="@id/appBarLayout"

@@ -1,4 +1,4 @@
-package com.aritra.restapp.Util;
+package com.aritra.restapp.util;
 
 public class Constants {
 

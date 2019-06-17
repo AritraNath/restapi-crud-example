@@ -1,4 +1,4 @@
-package com.aritra.restapp.Model;
+package com.aritra.restapp.model;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

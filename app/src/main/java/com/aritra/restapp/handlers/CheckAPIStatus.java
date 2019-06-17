@@ -1,4 +1,4 @@
-package com.aritra.restapp.Handlers;
+package com.aritra.restapp.handlers;
 
 import android.content.Context;
 import android.util.Log;
@@ -10,7 +10,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.aritra.restapp.Util.Constants;
+import com.aritra.restapp.util.Constants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
