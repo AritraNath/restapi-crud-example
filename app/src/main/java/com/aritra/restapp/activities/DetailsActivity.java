@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,7 +15,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -21,11 +22,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.aritra.restapp.data.Details;
 import com.aritra.restapp.R;
 import com.aritra.restapp.util.Constants;
 import com.google.android.material.appbar.SubtitleCollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONException;
@@ -33,11 +34,11 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class DetailsActivity extends AppCompatActivity implements View.OnClickListener {
     
     SubtitleCollapsingToolbarLayout scLayout;
+    CardView personal, educational, professional;
     private TextView tvPerMobile, tvPerLocation, tvPerSkills, tvPerLinks;
     private TextView tvEduOrg, tvEduDegree, tvEduLoc, tvEduStartYear, tvEduEndYear;
     private TextView tvProOrg, tvProDesignation, tvProStartDate, tvProEndDate;
@@ -46,10 +47,8 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog alertDialog;
 
-    int id;
+    int id, eduDelID, proDelID;
     String email, personalURL, educationURL, professionURL;
-
-    Details details;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,10 +78,8 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         tvPerSkills = findViewById(R.id.personalSkills);
         tvPerLinks = findViewById(R.id.personalLink);
 
-        ImageButton ivperEdit = findViewById(R.id.personalEditButton);
-        ImageButton ivperDelete = findViewById(R.id.personalDeleteButton);
-        ivperEdit.setOnClickListener(this);
-        ivperDelete.setOnClickListener(this);
+        ImageButton ivPerEdit = findViewById(R.id.personalEditButton);
+        ivPerEdit.setOnClickListener(this);
 
         tvEduOrg = findViewById(R.id.educationOrganisation);
         tvEduDegree = findViewById(R.id.educationDegree);
@@ -90,25 +87,28 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         tvEduStartYear = findViewById(R.id.educationStartYear);
         tvEduEndYear = findViewById(R.id.educationEndYear);
 
-        ImageButton iveduEdit = findViewById(R.id.educationEditButton);
-        ImageButton iveduDelete = findViewById(R.id.educationDeleteButton);
-        iveduEdit.setOnClickListener(this);
-        iveduDelete.setOnClickListener(this);
+        ImageButton ivEduEdit = findViewById(R.id.educationEditButton);
+        ImageButton ivEduDelete = findViewById(R.id.educationDeleteButton);
+        ivEduEdit.setOnClickListener(this);
+        ivEduDelete.setOnClickListener(this);
 
         tvProOrg = findViewById(R.id.professionOrganisation);
         tvProDesignation = findViewById(R.id.professionDesignation);
         tvProStartDate = findViewById(R.id.professionStartDate);
         tvProEndDate = findViewById(R.id.professionEndDate);
 
-        ImageButton ivproEdit = findViewById(R.id.professionEditButton);
-        ImageButton ivproDelete = findViewById(R.id.professionDeleteButton);
-        ivproEdit.setOnClickListener(this);
-        ivproDelete.setOnClickListener(this);
+        ImageButton ivProEdit = findViewById(R.id.professionEditButton);
+        ImageButton ivProDelete = findViewById(R.id.professionDeleteButton);
+        ivProEdit.setOnClickListener(this);
+        ivProDelete.setOnClickListener(this);
 
         FloatingActionButton floatingActionButton = findViewById(R.id.fabLogout);
         floatingActionButton.setOnClickListener(this);
 
-        details = new Details();
+        personal = findViewById(R.id.personalDetailsHideCard);
+        educational = findViewById(R.id.educationalDetailsHideCard);
+        professional = findViewById(R.id.professionalDetailsHideCard);
+
         requestQueue = Volley.newRequestQueue(this);
 
         jsonQuery();
@@ -127,19 +127,20 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
                         tvPerSkills.setText(object.getString("skills"));
                         tvPerLinks.setText(object.getString("links"));
 
-//                        details.setPersonalDetails(object.getString("name"), object.getString("location"),
-//                                object.getString("mobile_no"), object.getString("skills"), object.getString("links"));
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
 
+                else
+                    personal.setVisibility(View.VISIBLE);
+
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(DetailsActivity.this, "JSON Error", Toast.LENGTH_SHORT).show();
+                personal.setVisibility(View.VISIBLE);
+                Snackbar.make(getWindow().getDecorView().getRootView(), "Error occurred!", Snackbar.LENGTH_LONG).show();
             }
         });
         requestQueue.add(requestPer);
@@ -155,16 +156,19 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
                         tvEduLoc.setText(object.getString("location"));
                         tvEduStartYear.setText(object.getString("start_year"));
                         tvEduEndYear.setText(object.getString("end_year"));
+                        eduDelID = object.getInt("id");
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
+                else
+                    educational.setVisibility(View.VISIBLE);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                educational.setVisibility(View.VISIBLE);
             }
         });
         requestQueue.add(requestEdu);
@@ -179,16 +183,19 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
                         tvProDesignation.setText(object.getString("designation"));
                         tvProStartDate.setText(object.getString("start_date"));
                         tvProEndDate.setText(object.getString("end_date"));
+                        proDelID = object.getInt("id");
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
+                else
+                    professional.setVisibility(View.VISIBLE);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                professional.setVisibility(View.VISIBLE);
             }
         });
         requestQueue.add(requestPro);
@@ -217,9 +224,6 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         switch (id) {
             case R.id.personalEditButton :
                 updatePersonalDetails();
-                break;
-            case R.id.personalDeleteButton :
-                deletePersonalDetails();
                 break;
             case R.id.educationEditButton :
                 updateEducationDetails();
@@ -283,12 +287,13 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
                         Constants.BASE_URL + Constants.PERSONAL_DETAILS_URL + id, personalDetails, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Toast.makeText(DetailsActivity.this, "Personal details updated", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(getWindow().getDecorView().getRootView(),
+                                "Details updated", Snackbar.LENGTH_LONG).show();
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        Snackbar.make(getWindow().getDecorView().getRootView(), "Error occurred!", Snackbar.LENGTH_LONG).show();
                     }
                 });
                 requestQueue.add(personalRequest);
@@ -346,12 +351,13 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                Toast.makeText(DetailsActivity.this, "Educational details updated", Toast.LENGTH_SHORT).show();
+                                Snackbar.make(getWindow().getDecorView().getRootView(),
+                                        "Details updated", Snackbar.LENGTH_LONG).show();
                             }
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        Snackbar.make(getWindow().getDecorView().getRootView(), "Error occurred!", Snackbar.LENGTH_LONG).show();
                     }
                 });
                 requestQueue.add(educationRequest);
@@ -403,13 +409,13 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                Toast.makeText(DetailsActivity.this, "Professional details updated",
-                                        Toast.LENGTH_SHORT).show();
+                                Snackbar.make(getWindow().getDecorView().getRootView(),
+                                        "Details updated", Snackbar.LENGTH_LONG).show();
                             }
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        Snackbar.make(getWindow().getDecorView().getRootView(), "Error occurred!", Snackbar.LENGTH_LONG).show();
                     }
                 });
                 requestQueue.add(professionalRequest);
@@ -421,56 +427,89 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
-    private void deletePersonalDetails() {
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.DELETE, personalURL,
-                null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-        requestQueue.add(request);
-    }
-
     private void deleteEducationDetails() {
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.DELETE, educationURL,
-                null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-        requestQueue.add(request);
+        dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setTitle("Confirm Delete")
+                .setMessage("Are you sure you want to delete educational details?")
+                .setIcon(R.drawable.ic_warning_black_24dp)
+                .setPositiveButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialogInterface, int i) {
+                        JsonObjectRequest request = new JsonObjectRequest(Request.Method.DELETE,
+                                Constants.BASE_URL + Constants.EDUCATION_DETAILS_URL + eduDelID,
+                                null, new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                Snackbar.make(getWindow().getDecorView().getRootView(),
+                                        "Details deleted", Snackbar.LENGTH_LONG).show();
+                                dialogInterface.dismiss();
+                                startActivity(new Intent(DetailsActivity.this, DetailsActivity.class)
+                                        .putExtra("userID", id)
+                                        .putExtra("email", email));
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Snackbar.make(getWindow().getDecorView().getRootView(),
+                                        "Delete request failed", Snackbar.LENGTH_LONG).show();
+                            }
+                        });
+                        requestQueue.add(request);
+                    }
+                });
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
     }
 
     private void deleteProfessionalDetails() {
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.DELETE, professionURL,
-                null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
+        dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setTitle("Confirm Delete")
+                .setMessage("Are you sure you want to delete profession details?")
+                .setIcon(R.drawable.ic_warning_black_24dp)
+                .setPositiveButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialogInterface, int i) {
+                        JsonObjectRequest request = new JsonObjectRequest(Request.Method.DELETE,
+                                Constants.BASE_URL + Constants.PROFESSIONAL_DETAILS_URL + proDelID,
+                                null, new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                Snackbar.make(getWindow().getDecorView().getRootView(),
+                                        "Details deleted", Snackbar.LENGTH_LONG).show();
+                                dialogInterface.dismiss();
+                                startActivity(new Intent(DetailsActivity.this, DetailsActivity.class)
+                                        .putExtra("userID", id)
+                                        .putExtra("email", email));
 
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Snackbar.make(getWindow().getDecorView().getRootView(),
+                                        "Delete request failed", Snackbar.LENGTH_LONG).show();
+                            }
+                        });
+                        requestQueue.add(request);
+                    }
+                });
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
 
-            }
-        });
-        requestQueue.add(request);
     }
 
     private void logoutUser() {
         startActivity(new Intent(DetailsActivity.this, LoginActivity.class));
     }
-
 }
