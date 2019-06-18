@@ -32,50 +32,21 @@
             android:layout_marginEnd="16dp"
             android:orientation="horizontal">
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="175dp"
+            <com.satsuware.usefulviews.LabelledSpinner
+                android:id="@+id/educationDetailStartYear"
+                android:layout_width="165dp"
                 android:layout_height="wrap_content"
-                app:errorEnabled="true"
-                app:helperText="*Required"
-                app:helperTextEnabled="true">
+                app:labelText="Start Year">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/educationDetailStartYear"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:clickable="true"
-                    android:drawableEnd="@drawable/ic_date_range_black_24dp"
-                    android:drawableTint="#8000"
-                    android:enabled="true"
-                    android:inputType="number"
-                    android:hint="Start Year"
-                    android:textSize="16sp" />
+            </com.satsuware.usefulviews.LabelledSpinner>
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <com.satsuware.usefulviews.LabelledSpinner
+                android:id="@+id/educationDetailEndYear"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:counterEnabled="false"
-                app:errorEnabled="true"
-                app:helperText="*Required"
-                app:helperTextEnabled="true">
+                app:labelText="End Year">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/educationDetailEndYear"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:drawableEnd="@drawable/ic_date_range_black_24dp"
-                    android:drawableTint="#8000"
-                    android:enabled="true"
-                    android:inputType="number"
-                    android:hint="End Year"
-                    android:textSize="16sp" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.satsuware.usefulviews.LabelledSpinner>
         </LinearLayout>
 
 

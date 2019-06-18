@@ -516,19 +516,4 @@
         app:layout_anchor="@id/appBarLayout"
         app:layout_anchorGravity="bottom|right|end" />
 
-    <TextView
-        android:id="@+id/eduDelID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#F9F9F9"
-        android:visibility="invisible"
-        tools:visibility="invisible" />
-
-    <TextView
-        android:id="@+id/proDelID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#F9F9F9"
-        android:visibility="invisible"
-        tools:visibility="invisible" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

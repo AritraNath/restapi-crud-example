@@ -3,16 +3,20 @@ package com.aritra.restapp.activities;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.DialogFragment;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -22,21 +26,25 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.aritra.restapp.model.DatePickerFragment;
 import com.aritra.restapp.util.Constants;
 import com.aritra.restapp.handlers.CheckAPIStatus;
 import com.aritra.restapp.R;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.satsuware.usefulviews.LabelledSpinner;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     private TextInputLayout tiEmail, tiPass;
     private EditText etEmail, etPass;
@@ -46,7 +54,11 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnLoginSignUp;
     private CheckBox cbSignIn;
     private ConstraintLayout logInLayout;
+    TextInputEditText professionEndDate, professionStartDate;
     int id;
+    int flag;
+    int startYear, endYear;
+    List<Integer> yearList;
     String email, password, url;
 
     @Override
@@ -92,6 +104,14 @@ public class LoginActivity extends AppCompatActivity {
 
         requestQueue = Volley.newRequestQueue(this);
         personalrequestQueue = Volley.newRequestQueue(this);
+        
+        yearList = new ArrayList<>();
+        
+        int year = (Calendar.getInstance().get(Calendar.YEAR)) - 40;
+        for(int i = 0; i < 80; i++) {
+            yearList.add(year);
+            year++;
+        }
     }
 
     public void signIn(View view) {
@@ -232,26 +252,55 @@ public class LoginActivity extends AppCompatActivity {
         dialogBuilder = new AlertDialog.Builder(this);
         View view = getLayoutInflater().inflate(R.layout.popup_educational, null);
 
-        final TextInputEditText educationStartYear = view.findViewById(R.id.educationDetailStartYear);
-        final TextInputEditText educationEndYear = view.findViewById(R.id.educationDetailEndYear);
+        final LabelledSpinner educationStartYear = view.findViewById(R.id.educationDetailStartYear);
+        final LabelledSpinner educationEndYear = view.findViewById(R.id.educationDetailEndYear);
         final TextInputEditText educationDegree = view.findViewById(R.id.educationDetailDegree);
         final TextInputEditText educationOrganisation = view.findViewById(R.id.educationDetailOrganisation);
         final TextInputEditText educationLocation = view.findViewById(R.id.educationDetailLocation);
         Button saveButton = view.findViewById(R.id.educationalSave);
+        
+        educationStartYear.setItemsArray(yearList);
+        educationStartYear.setSelection(yearList.indexOf(Calendar.getInstance().get(Calendar.YEAR)));
+        educationEndYear.setItemsArray(yearList);
+        educationEndYear.setSelection(yearList.indexOf(Calendar.getInstance().get(Calendar.YEAR) + 4));
 
         dialogBuilder.setView(view);
         alertDialog = dialogBuilder.create();
         alertDialog.setCancelable(false);
         alertDialog.show();
 
+        educationStartYear.setOnItemChosenListener(new LabelledSpinner.OnItemChosenListener() {
+            @Override
+            public void onItemChosen(View labelledSpinner, AdapterView<?> adapterView, View itemView, int position, long id) {
+                startYear = yearList.get(position);
+            }
+
+            @Override
+            public void onNothingChosen(View labelledSpinner, AdapterView<?> adapterView) {
+
+            }
+        });
+
+        educationEndYear.setOnItemChosenListener(new LabelledSpinner.OnItemChosenListener() {
+            @Override
+            public void onItemChosen(View labelledSpinner, AdapterView<?> adapterView, View itemView, int position, long id) {
+                endYear = yearList.get(position);
+            }
+
+            @Override
+            public void onNothingChosen(View labelledSpinner, AdapterView<?> adapterView) {
+
+            }
+        });
+
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String start_year = educationStartYear.getText().toString();
+                String start_year = String.valueOf(startYear);
                 String degree = educationDegree.getText().toString();
                 String organisation = educationOrganisation.getText().toString();
                 String location = educationLocation.getText().toString();
-                String end_year = educationEndYear.getText().toString();
+                String end_year = String.valueOf(endYear);
 
                 Map<String, String> educationParams = new HashMap<>();
                 educationParams.put("start_year", start_year);
@@ -288,16 +337,48 @@ public class LoginActivity extends AppCompatActivity {
         dialogBuilder = new AlertDialog.Builder(this);
         View view = getLayoutInflater().inflate(R.layout.popup_proffesional, null);
 
-        final TextInputEditText professionStartDate = view.findViewById(R.id.professionalStartDate);
-        final TextInputEditText professionEndDate = view.findViewById(R.id.professionalEndDate);
+        professionStartDate = view.findViewById(R.id.professionalStartDate);
+        professionEndDate = view.findViewById(R.id.professionalEndDate);
         final TextInputEditText professionOrganisation = view.findViewById(R.id.professionalOrganisation);
         final TextInputEditText professionDesignation = view.findViewById(R.id.professionalDesignation);
+        final CheckBox professionalWorking = view.findViewById(R.id.cbStillWorking);
         Button saveButton = view.findViewById(R.id.professionalSave);
 
         dialogBuilder.setView(view);
         alertDialog = dialogBuilder.create();
         alertDialog.setCancelable(false);
         alertDialog.show();
+
+        professionalWorking.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(professionalWorking.isChecked()) {
+                    professionEndDate.setText("Present");
+                    professionEndDate.setClickable(false);
+                }
+
+                else {
+                    professionEndDate.setClickable(true);
+                    professionEndDate.setText(null);
+                }
+            }
+        });
+
+        professionStartDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                flag = 0;
+                showDatePicker();
+            }
+        });
+
+        professionEndDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                flag = 1;
+                showDatePicker();
+            }
+        });
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -335,5 +416,20 @@ public class LoginActivity extends AppCompatActivity {
                 .putExtra("email", email));
             }
         });
+    }
+
+    private void showDatePicker() {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int date) {
+
+        Log.d("DATE", date + "-" + (month + 1) + "-" + year);
+        if(flag == 0)
+            professionStartDate.setText(date + "-" + (month + 1) + "-" + year);
+        else
+            professionEndDate.setText(date + "-" + (month + 1) + "-" + year);
     }
 }
